@@ -1,4 +1,4 @@
-package com.yongwoonlim.restfulwebservice;
+package com.yongwoonlim.restfulwebservice.helloworld;
 
 // lombok
 
