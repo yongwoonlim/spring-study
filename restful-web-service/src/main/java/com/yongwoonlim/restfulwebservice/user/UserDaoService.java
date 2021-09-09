@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserDaoService {
@@ -21,8 +22,8 @@ public class UserDaoService {
         return users;
     }
 
-    public User findOne(int id) {
-        return users.stream().filter(user -> user.getId() == id).findFirst().orElse(null);
+    public Optional<User> findOne(int id) {
+        return users.stream().filter(user -> user.getId() == id).findFirst();
     }
 
     public User save(User user) {
