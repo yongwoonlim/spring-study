@@ -35,4 +35,10 @@ public class UserDaoService {
         users.add(user);
         return user;
     }
+
+    public Optional<User> deleteById(int id) {
+        Optional<User> userOptional = findOne(id);
+        userOptional.ifPresent(users::remove);
+        return userOptional;
+    }
 }
