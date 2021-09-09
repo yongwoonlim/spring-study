@@ -30,9 +30,18 @@ public class UserDaoService {
         if (user.getId() == null) {
             user.setId(++sequence);
             user.setJoinDate(new Date());
+
+            users.add(user);
+        } else {
+            Optional<User> userOptional = findOne(user.getId());
+
+            if (userOptional.isEmpty()) {
+                return null;
+            }
+
+            userOptional.get().setName(user.getName());
         }
 
-        users.add(user);
         return user;
     }
 

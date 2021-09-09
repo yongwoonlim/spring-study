@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User savedUser = userDaoService.save(user);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -34,5 +35,21 @@ public class UserController {
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
+        User updatedUser = userDaoService.save(user);
+
+        if (updatedUser == null) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", user.getId()));
+        }
+
+        return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable int id) {
+        userDaoService.deleteById(id).orElseThrow(() -> new UserNotFoundException(String.format("ID[%s] not found", id)));
     }
 }
