@@ -31,7 +31,8 @@ public class AdminUserController {
     }
 
     //    @GetMapping("/v1/users/{id}")
-    @GetMapping(value = "/users/{id}/", params = "version=1")
+    //    @GetMapping(value = "/users/{id}/", params = "version=1")
+    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=1")
     public MappingJacksonValue retrieveUserV1(@PathVariable int id) {
         SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "ssn");
         FilterProvider filterProvider = new SimpleFilterProvider().addFilter("UserInfo", simpleBeanPropertyFilter);
@@ -41,7 +42,8 @@ public class AdminUserController {
     }
 
     //    @GetMapping("/v2/users/{id}")
-    @GetMapping(value = "/users/{id}/", params = "version=2")
+    //    @GetMapping(value = "/users/{id}/", params = "version=2")
+    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=2")
     public MappingJacksonValue retrieveUserV2(@PathVariable int id) {
         User user = userDaoService.findOne(id).orElseThrow(() -> new UserNotFoundException(String.format("ID[%s] not found", id)));
 
