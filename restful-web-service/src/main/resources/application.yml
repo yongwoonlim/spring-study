@@ -4,3 +4,6 @@ server:
 #logging:
 #  level:
 #    org.springframework: DEBUG # org.springframework 패키지 대상만 로깅 메시지를 디버그 모드로 출력
+spring:
+  messages:
+    basename: messages
