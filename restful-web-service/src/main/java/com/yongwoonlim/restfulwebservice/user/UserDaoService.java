@@ -13,9 +13,9 @@ public class UserDaoService {
     private static int sequence = 0;
 
     static {
-        users.add(new User(++sequence, "Yongwoon", new Date()));
-        users.add(new User(++sequence, "Yonghyun", new Date()));
-        users.add(new User(++sequence, "Dion", new Date()));
+        users.add(new User(++sequence, "Yongwoon", new Date(), "pass1", "701010-1111111"));
+        users.add(new User(++sequence, "Yonghyun", new Date(), "pass2", "701010-1111111"));
+        users.add(new User(++sequence, "Dion", new Date(), "pass3", "701010-1111111"));
     }
 
     public List<User> findAll() {
