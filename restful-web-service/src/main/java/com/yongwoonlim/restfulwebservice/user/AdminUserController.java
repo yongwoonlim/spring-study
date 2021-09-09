@@ -30,9 +30,9 @@ public class AdminUserController {
         return mappingJacksonValue;
     }
 
-    @GetMapping("/v1/users/{id}")
+    //    @GetMapping("/v1/users/{id}")
+    @GetMapping(value = "/users/{id}/", params = "version=1")
     public MappingJacksonValue retrieveUserV1(@PathVariable int id) {
-
         SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "ssn");
         FilterProvider filterProvider = new SimpleFilterProvider().addFilter("UserInfo", simpleBeanPropertyFilter);
         MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(userDaoService.findOne(id).orElseThrow(() -> new UserNotFoundException(String.format("ID[%s] not found", id))));
@@ -40,7 +40,8 @@ public class AdminUserController {
         return mappingJacksonValue;
     }
 
-    @GetMapping("/v2/users/{id}")
+    //    @GetMapping("/v2/users/{id}")
+    @GetMapping(value = "/users/{id}/", params = "version=2")
     public MappingJacksonValue retrieveUserV2(@PathVariable int id) {
         User user = userDaoService.findOne(id).orElseThrow(() -> new UserNotFoundException(String.format("ID[%s] not found", id)));
 
