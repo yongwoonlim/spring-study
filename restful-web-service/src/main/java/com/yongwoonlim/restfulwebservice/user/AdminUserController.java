@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,11 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping("/admin")
 public class AdminUserController {
     private final UserDaoService userDaoService;
 
-    @GetMapping
+    @GetMapping("/users")
     public MappingJacksonValue retrieveAllUsers() {
         List<User> users = userDaoService.findAll();
 
@@ -29,8 +30,8 @@ public class AdminUserController {
         return mappingJacksonValue;
     }
 
-    @GetMapping("/{id}")
-    public MappingJacksonValue retrieveUser(@PathVariable int id) {
+    @GetMapping("/v1/users/{id}")
+    public MappingJacksonValue retrieveUserV1(@PathVariable int id) {
 
         SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "ssn");
         FilterProvider filterProvider = new SimpleFilterProvider().addFilter("UserInfo", simpleBeanPropertyFilter);
@@ -39,7 +40,22 @@ public class AdminUserController {
         return mappingJacksonValue;
     }
 
-    @PutMapping
+    @GetMapping("/v2/users/{id}")
+    public MappingJacksonValue retrieveUserV2(@PathVariable int id) {
+        User user = userDaoService.findOne(id).orElseThrow(() -> new UserNotFoundException(String.format("ID[%s] not found", id)));
+
+        UserV2 userV2 = new UserV2();
+        BeanUtils.copyProperties(user, userV2);
+        userV2.setGrade("VIP");
+
+        SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "grade");
+        FilterProvider filterProvider = new SimpleFilterProvider().addFilter("UserInfoV2", simpleBeanPropertyFilter);
+        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(userV2);
+        mappingJacksonValue.setFilters(filterProvider);
+        return mappingJacksonValue;
+    }
+
+    @PutMapping("/users")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         User updatedUser = userDaoService.save(user);
 

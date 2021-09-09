@@ -24,10 +24,6 @@ public class User {
 
     @Past
     private Date joinDate;
-
-    //    @JsonIgnore
     private String password;
-
-    //    @JsonIgnore
     private String ssn;
 }
