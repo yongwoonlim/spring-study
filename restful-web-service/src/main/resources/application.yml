@@ -7,9 +7,14 @@ server:
 spring:
   messages:
     basename: messages
+  security:
+    user:
+      name: username
+      password: password
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
