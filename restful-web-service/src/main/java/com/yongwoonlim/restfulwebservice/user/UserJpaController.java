@@ -39,4 +39,11 @@ public class UserJpaController {
                         .buildAndExpand(savedUser.getId())
                         .toUri()).build();
     }
+
+    @GetMapping("/{id}/posts")
+    public List<Post> retrieveAllPostsByUser(@PathVariable int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(String.format("ID[%d] not found", id)))
+                .getPosts();
+    }
 }
