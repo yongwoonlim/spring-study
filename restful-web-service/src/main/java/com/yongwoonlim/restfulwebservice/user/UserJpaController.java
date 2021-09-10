@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/jpa/users")
 public class UserJpaController {
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @GetMapping
     public List<User> retrieveAllUsers() {
@@ -45,5 +46,18 @@ public class UserJpaController {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(String.format("ID[%d] not found", id)))
                 .getPosts();
+    }
+
+    @PostMapping("/{id}/posts")
+    public ResponseEntity<Post> createPost(@PathVariable int id, @RequestBody Post post) {
+        User user = retrieveUserById(id);
+        post.setUser(user);
+        Post savedPost = postRepository.save(post);
+
+        return ResponseEntity.created(
+                ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(savedPost.getId())
+                        .toUri()).build();
     }
 }
